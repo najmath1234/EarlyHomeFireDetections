@@ -22,6 +22,7 @@ from myapp import views
 urlpatterns = [
    path('login_get/',views.login_get),
    path('login_post/',views.login_post),
+   path('logout_get/', views.logout_get),
 
    path('forgetpasswword_get/',views.forgetpasswword_get),
    path('forgetpassword_post/',views.forgetpassword_post),
@@ -43,9 +44,21 @@ urlpatterns = [
    path('adminhome_get/',views.adminhome_get),
 
    path('block_user/<id>',views.block_user),
+
+   path('viewrating/',views.viewrating_get),
+
+
+
+
+
 #U S E R-------------------------------------------------------
+   path('register_get/',views.register_get),
+   path('register_post/',views.register_post),
+
+   path('userhome_get/',views.userhome_get),
+
    path('editprofile_get/',views.editprofile_get),
-   path('editprofile_get/',views.editprofile_post),
+   path('editprofile_post/',views.editprofile_post),
 
    path('sentcomplaint_get/',views.sentcomplaint_get),
    path('sentcomplaint_post/',views.sentcomplaint_post),
@@ -59,5 +72,10 @@ urlpatterns = [
 
    path('ratingandreview_get/',views.ratingandreview_get),
    path('ratingandreviw_post/',views.ratingandreviw_post),
+
+
+
+   path('user_changepassword_get/',views.user_changepassword_get),
+   path('user_changepassword_post/',views.user_changepassword_post),
 
 ]

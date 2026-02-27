@@ -9,6 +9,7 @@
   <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 </head>
 <body>
+
   <div class="container mt-5">
     <h3 class="mb-4">View Complaints</h3>
 
@@ -46,7 +47,16 @@
             <td>{{ i.USER.name}}</td>
             <td>{{ i.complaint }}</td>
             <td>{{ i.status}}</td>
-            <td><a href="/myapp/sentreply_get/{{ i.id }}" class="btn btn-sm btn-primary">Reply</a></td>
+            <td>
+                {% if i.status == 'pending' %}
+
+                <a href="/myapp/sentreply_get/{{ i.id }}" class="btn btn-sm btn-primary">Reply</a>
+            {% else %}
+
+                {{ i.reply }}
+                {% endif %}
+
+            </td>
           </tr>
 {% endfor %}
           <!-- Add more rows as needed -->
@@ -55,12 +65,14 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+        <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
   <script>
+
+
     // Extend DataTables with custom date filtering
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
       const min = document.getElementById('fromDate').value;
@@ -90,3 +102,4 @@
   </script>
 </body>
 </html>
+

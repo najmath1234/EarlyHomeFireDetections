@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
   <div class="container mt-5">
     <h4 class="mb-4">Rate and Review</h4>
+      <form action="/myapp/ratingandreviw_post/" method="post">
+        {% csrf_token %}
     <form>
       <!-- Name -->
-      <div class="mb-3">
-        <label for="userName" class="form-label">Your Name</label>
-        <input type="text" class="form-control" name="your name" id="userName" required>
-      </div>
+
 
       <!-- Rating (Stars) -->
       <div class="mb-3">
@@ -46,7 +46,7 @@
       <!-- Review Text -->
       <div class="mb-3">
         <label for="reviewText" class="form-label">Your Review</label>
-        <textarea class="form-control" id="reviewText" rows="4" placeholder="Write your review here..." required></textarea>
+        <textarea class="form-control" id="reviewText" name="review" rows="4" placeholder="Write your review here..." required></textarea>
       </div>
 
       <!-- Submit Button -->
@@ -58,3 +58,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+

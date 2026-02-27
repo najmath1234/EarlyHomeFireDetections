@@ -31,23 +31,22 @@
           <tr>
             <th>Sl. No.</th>
             <th>Date</th>
-            <th>From</th>
             <th>Complaint</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>reply</th>
           </tr>
         </thead>
         <tbody>
           <!-- Sample Data Rows -->
+          {% for i in reply %}
           <tr>
-            <td>1</td>
-            <td>2025-07-25</td>
-            <td>MG Road</td>
-            <td>Water leakage near street 12</td>
-            <td>Pending</td>
-            <td><button class="btn btn-sm btn-primary">View</button></td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.date }}</td>
+            <td>{{ i.complaint }}</td>
+            <td>{{ i.status }}</td>
+            <td>{{ i.reply }}</td>
           </tr>
-
+{% endfor %}
           <!-- Add more rows as needed -->
         </tbody>
       </table>
