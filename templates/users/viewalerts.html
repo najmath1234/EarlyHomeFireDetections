@@ -1,0 +1,147 @@
+{% extends 'users/userhome.html' %}
+{% block body %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <!-- Header -->
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-1 fw-bold">Fire & Smoke Alerts</h3>
+                    <p class="mb-0">Real-time detections from your home monitoring system</p>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Date Filter -->
+                    <div class="row g-4 mb-5 justify-content-center">
+                        <div class="col-md-5 col-lg-4">
+                            <label for="fromDate" class="form-label fw-bold text-muted">
+                                <i class="far fa-calendar-alt me-2 text-danger"></i>From Date
+                            </label>
+                            <input type="date" id="fromDate" class="form-control form-control-lg" placeholder="Select start date">
+                        </div>
+                        <div class="col-md-5 col-lg-4">
+                            <label for="toDate" class="form-label fw-bold text-muted">
+                                <i class="far fa-calendar-alt me-2 text-danger"></i>To Date
+                            </label>
+                            <input type="date" id="toDate" class="form-control form-control-lg" placeholder="Select end date">
+                        </div>
+                    </div>
+
+                    <!-- Alerts Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered align-middle" id="alertsTable">
+                            <thead class="table-danger text-dark">
+                                <tr>
+                                    <th class="text-center" style="width: 60px;">Si.No</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Detected</th>
+                                    <th class="text-center">Image</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if alert %}
+                                    {% for alert in alert %}
+                                    <tr>
+                                        <td class="text-center fw-bold">{{ forloop.counter }}</td>
+                                        <td>{{ alert.date|date:"d M Y" }}</td>
+                                        <td>{{ alert.time }}</td>
+                                        <td>
+                                            <span class="badge rounded-pill px-3 py-2 {% if 'fire' in alert.label|lower %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                                {{ alert.label|title }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ alert.image }}" data-lightbox="alerts" data-title="Alert on {{ alert.date }} at {{ alert.time }}">
+                                                <img src="{{ alert.image }}" alt="Alert Image" class="img-thumbnail shadow-sm" style="max-width: 120px; height: auto; cursor: pointer;">
+                                            </a>
+                                        </td>
+                                    <td>
+                                        <a href="/myapp/deletealertuser/{{ alert.id }}" class="btn btn-danger">Delete</a>
+                                    </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="alert alert-info mb-0">
+                                                <i class="fas fa-bell-slash fa-2x mb-3 d-block text-muted"></i>
+                                                <h5 class="mb-2">No alerts found</h5>
+                                                <p class="text-muted mb-0">No fire or smoke detections in the selected period.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <small class="text-muted">
+                        Showing all fire & smoke detection alerts • Last updated: {% now "d M Y, H:i" %}
+                    </small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- DataTables Initialization + Custom Date Range Filter -->
+<script>
+$(document).ready(function () {
+    // Custom date range filter
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            const min = $('#fromDate').val();
+            const max = $('#toDate').val();
+            const dateStr = data[1]; // Date column (index 1)
+
+            if (!dateStr) return true;
+
+            const itemDate = new Date(dateStr);
+            const minDate = min ? new Date(min) : null;
+            const maxDate = max ? new Date(max) : null;
+
+            if (
+                (!minDate || itemDate >= minDate.setHours(0,0,0,0)) &&
+                (!maxDate || itemDate <= maxDate.setHours(23,59,59,999))
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Initialize DataTable
+    const table = $('#alertsTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 20, 50, 100],
+        order: [[1, 'desc']],          // Default sort by date descending
+        language: {
+            search: "Filter alerts:",
+            emptyTable: "No alerts to display",
+            info: "Showing _START_ to _END_ of _TOTAL_ alerts",
+            infoEmpty: "No alerts available",
+            infoFiltered: "(filtered from _MAX_ total alerts)"
+        }
+    });
+
+    // Redraw table when date inputs change
+    $('#fromDate, #toDate').on('change', function () {
+        table.draw();
+    });
+});
+</script>
+{% endblock %}

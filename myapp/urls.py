@@ -24,8 +24,8 @@ urlpatterns = [
    path('login_post/',views.login_post),
    path('logout_get/', views.logout_get),
 
-   path('forgetpasswword_get/',views.forgetpasswword_get),
-   path('forgetpassword_post/',views.forgetpassword_post),
+   path('forgot_get/',views.forgot_get),
+   path('forgot_post/',views.forgot_post),
 
    path('changepassword_get/',views.changepassword_get),
    path('changepassword_post/',views.changepassword_post),
@@ -44,6 +44,8 @@ urlpatterns = [
    path('adminhome_get/',views.adminhome_get),
 
    path('block_user/<id>',views.block_user),
+   path('unblock_user/<id>',views.unblock_user),
+   path('deletealertuser/<id>',views.deletealertuser),
 
    path('viewrating/',views.viewrating_get),
 
@@ -77,5 +79,8 @@ urlpatterns = [
 
    path('user_changepassword_get/',views.user_changepassword_get),
    path('user_changepassword_post/',views.user_changepassword_post),
+   path('userviewalerts_get/',views.userviewalerts_get),
+   path('upload_detection/',views.upload_detection),
+   path('predict/',views.predict),
 
 ]

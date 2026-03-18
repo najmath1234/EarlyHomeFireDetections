@@ -1,94 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>View Review</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- DataTables CSS -->
-  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-</head>
-<body>
+{% extends 'admins/adminhome.html' %}
+{% block body %}
 
-  <div class="container mt-5">
-    <h3 class="mb-4">View Review</h3>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-11">
 
-    <!-- Date Filter Inputs -->
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <label for="fromDate" class="form-label">From Date</label>
-        <input type="date" id="fromDate" class="form-control">
-      </div>
-      <div class="col-md-4">
-        <label for="toDate" class="form-label">To Date</label>
-        <input type="date" id="toDate" class="form-control">
-      </div>
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <!-- Header -->
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h3 class="mb-1 fw-bold">User Reviews & Ratings</h3>
+                    <p class="mb-0">Feedback and ratings submitted by users of the YOLO-HF system</p>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Date Filter -->
+                    <div class="row g-4 mb-5 justify-content-center">
+                        <div class="col-md-5 col-lg-4">
+                            <label for="fromDate" class="form-label fw-bold text-muted">
+                                <i class="far fa-calendar-alt me-2 text-success"></i> From Date
+                            </label>
+                            <input type="date" id="fromDate" class="form-control form-control-lg">
+                        </div>
+                        <div class="col-md-5 col-lg-4">
+                            <label for="toDate" class="form-label fw-bold text-muted">
+                                <i class="far fa-calendar-alt me-2 text-success"></i> To Date
+                            </label>
+                            <input type="date" id="toDate" class="form-control form-control-lg">
+                        </div>
+                    </div>
+
+                    <!-- Reviews Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered align-middle" id="reviewsTable">
+                            <thead class="table-success text-dark">
+                                <tr>
+                                    <th class="text-center" style="width: 70px;">Sl. No.</th>
+                                    <th>Date</th>
+                                    <th>Review</th>
+                                    <th>Rating</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if data %}
+                                    {% for review in data %}
+                                    <tr>
+                                        <td class="text-center fw-bold">{{ forloop.counter }}</td>
+                                        <td>{{ review.date|date:"d M Y" }}</td>
+                                        <td>
+                                            <div class="text-truncate" style="max-width: 340px;"
+                                                 data-bs-toggle="tooltip"
+                                                 data-bs-placement="top"
+                                                 title="{{ review.review|default:'No review text provided' }}">
+                                                {{ review.review|truncatechars:80|default:"—" }}
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                           {% if review.rating == "1" %}
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                           {% elif review.rating == "2" %}
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                           {% elif review.rating == "3" %}
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                           {% elif review.rating == "4" %}
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                           {% elif review.rating == "5" %}
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+                                               <img src="/static/fullstar.jpg" height="20" width="20">
+
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <strong>{{ review.USER.name|default:"—" }}</strong><br>
+                                            <small class="text-muted">{{ review.USER.email|default:"—" }}</small>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="alert alert-light border mb-0">
+                                                <i class="far fa-star fa-3x mb-4 text-muted"></i>
+                                                <h5 class="mb-3">No reviews found</h5>
+                                                <p class="text-muted mb-0">
+                                                    No user ratings or reviews have been submitted in the selected date range.<br>
+                                                    <small>Try adjusting the filters or check back later.</small>
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <small class="text-muted">
+                        Showing all user-submitted reviews & ratings •
+                        Last updated: {% now "d M Y, H:i" %}
+                    </small>
+                </div>
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <!-- Complaints Table -->
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover" id="complaintTable">
-        <thead class="table-light">
-          <tr>
-            <th>Sl. No.</th>
-            <th>Date</th>
-            <th>review</th>
-            <th>rating</th>
-            <th>USER</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Sample Data Rows -->
-          {% for i in data %}
-          <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ i.date }}</td>
-            <td>{{ i.review }}</td>
-            <td>{{ i.rating }}</td>
-            <td>{{ i.USER.name}}</td>
-          </tr>
-{% endfor %}
-          <!-- Add more rows as needed -->
-        </tbody>
-      </table>
-    </div>
-  </div>
+{% endblock %}
 
-        <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+{% block scripts %}
+<script>
+// Custom date range filter for DataTables
+$.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        const min = $('#fromDate').val();
+        const max = $('#toDate').val();
+        const dateStr = data[1]; // Date column index 1
 
-  <script>
+        if (!dateStr) return true;
 
+        const itemDate = new Date(dateStr);
+        const minDate = min ? new Date(min) : null;
+        const maxDate = max ? new Date(max) : null;
 
-    // Extend DataTables with custom date filtering
-    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-      const min = document.getElementById('fromDate').value;
-      const max = document.getElementById('toDate').value;
-      const dateStr = data[1]; // Date is column index 1
-      const date = new Date(dateStr);
+        if (
+            (!minDate || itemDate >= minDate.setHours(0,0,0,0)) &&
+            (!maxDate || itemDate <= maxDate.setHours(23,59,59,999))
+        ) {
+            return true;
+        }
+        return false;
+    }
+);
 
-      const minDate = min ? new Date(min) : null;
-      const maxDate = max ? new Date(max) : null;
-
-      if ((!minDate || date >= minDate) && (!maxDate || date <= maxDate)) {
-        return true;
-      }
-      return false;
+$(document).ready(function () {
+    const table = $('#reviewsTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 20, 20],
+        order: [[1, 'desc']],           // Newest reviews first
+        language: {
+            search: "Search reviews:",
+            emptyTable: "No reviews to display",
+            info: "Showing _START_ to _END_ of _TOTAL_ reviews",
+            infoEmpty: "No reviews available",
+            infoFiltered: "(filtered from _MAX_ total)"
+        }
     });
 
-    // Initialize DataTable and bind filter events
-    $(document).ready(function () {
-      const table = $('#complaintTable').DataTable({
-        pageLength: 5
-      });
-
-      $('#fromDate, #toDate').on('change', function () {
+    // Redraw table when date inputs change
+    $('#fromDate, #toDate').on('change', function () {
         table.draw();
-      });
     });
-  </script>
-</body>
-</html>
 
+    // Enable Bootstrap tooltips for truncated review text
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+});
+</script>
+{% endblock %}

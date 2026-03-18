@@ -1,62 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Rate & Review</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% extends 'users/userhome.html' %}
+{% block body %}
 
-  <!-- Optional: Font Awesome for star icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9 col-sm-11">
 
-  <div class="container mt-5">
-    <h4 class="mb-4">Rate and Review</h4>
-      <form action="/myapp/ratingandreviw_post/" method="post">
-        {% csrf_token %}
-    <form>
-      <!-- Name -->
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <!-- Card Header -->
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-1 fw-bold">Rate & Review</h3>
+                    <p class="mb-0">Share your experience with YOLO-HF</p>
+                </div>
 
+                <!-- Card Body -->
+                <div class="card-body p-4 p-md-5">
+                    <form action="/myapp/ratingandreviw_post/" method="post">
+                        {% csrf_token %}
 
-      <!-- Rating (Stars) -->
-      <div class="mb-3">
-        <label class="form-label d-block">Rating</label>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="rating" id="rate1" value="1" required>
-          <label class="form-check-label" for="rate1"><i class="fas fa-star text-warning"></i></label>
+                        <!-- Rating Stars -->
+                        <div class="mb-5 text-center">
+                            <label class="form-label fw-bold d-block fs-5 mb-3">How would you rate us?</label>
+
+                            <div class="rating-stars d-inline-flex gap-1" style="font-size: 2.2rem;">
+                                <input type="radio" name="rating" id="rate1" value="1" class="d-none" required>
+                                <label for="rate1" class="star text-warning"><i class="far fa-star"></i></label>
+
+                                <input type="radio" name="rating" id="rate2" value="2" class="d-none">
+                                <label for="rate2" class="star text-warning"><i class="far fa-star"></i></label>
+
+                                <input type="radio" name="rating" id="rate3" value="3" class="d-none">
+                                <label for="rate3" class="star text-warning"><i class="far fa-star"></i></label>
+
+                                <input type="radio" name="rating" id="rate4" value="4" class="d-none">
+                                <label for="rate4" class="star text-warning"><i class="far fa-star"></i></label>
+
+                                <input type="radio" name="rating" id="rate5" value="5" class="d-none">
+                                <label for="rate5" class="star text-warning"><i class="far fa-star"></i></label>
+                            </div>
+
+                            <div class="selected-rating mt-3 fw-bold text-muted" id="selectedRatingText">
+                                Select your rating
+                            </div>
+                        </div>
+
+                        <!-- Review Textarea -->
+                        <div class="mb-4">
+                            <label for="reviewText" class="form-label fw-bold">Your Review</label>
+                            <textarea
+                                class="form-control form-control-lg"
+                                id="reviewText"
+                                name="review"
+                                rows="5"
+                                placeholder="Tell us about your experience with the Home Fire Detection System..."
+                                maxlength="500"
+                                required
+                            ></textarea>
+                            <div class="d-flex justify-content-between mt-2 small text-muted">
+                                <span id="charCount">0 / 500 characters</span>
+                                <span class="text-end">Be specific about what you liked or what can be improved</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-success btn-lg px-5 py-3">
+                                <i class="fas fa-paper-plane me-2"></i> Submit Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <small class="text-muted">
+                        Thank you for helping us improve! Your feedback matters.
+                    </small>
+                </div>
+            </div>
+
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="rating" id="rate2" value="2">
-          <label class="form-check-label" for="rate2"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="rating" id="rate3" value="3">
-          <label class="form-check-label" for="rate3"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="rating" id="rate4" value="4">
-          <label class="form-check-label" for="rate4"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="rating" id="rate5" value="5">
-          <label class="form-check-label" for="rate5"><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></label>
-        </div>
-      </div>
+    </div>
+</div>
 
-      <!-- Review Text -->
-      <div class="mb-3">
-        <label for="reviewText" class="form-label">Your Review</label>
-        <textarea class="form-control" id="reviewText" name="review" rows="4" placeholder="Write your review here..." required></textarea>
-      </div>
+<!-- Simple JS for interactive stars & character count -->
+<script>
+    // Star rating hover & click effect
+    document.querySelectorAll('.rating-stars label').forEach(label => {
+        label.addEventListener('mouseover', function() {
+            const rating = parseInt(this.getAttribute('for').replace('rate', ''));
+            highlightStars(rating);
+        });
 
-      <!-- Submit Button -->
-      <button type="submit" class="btn btn-success">Submit Review</button>
-    </form>
-  </div>
+        label.addEventListener('mouseout', function() {
+            const checked = document.querySelector('input[name="rating"]:checked');
+            highlightStars(checked ? parseInt(checked.value) : 0);
+        });
 
-  <!-- Bootstrap + Font Awesome Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        label.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('for').replace('rate', ''));
+            document.getElementById('selectedRatingText').textContent = `${rating} Star${rating > 1 ? 's' : ''}`;
+        });
+    });
 
+    function highlightStars(rating) {
+        document.querySelectorAll('.rating-stars label').forEach((label, index) => {
+            const starValue = index + 1;
+            const icon = label.querySelector('i');
+            if (starValue <= rating) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        });
+    }
 
+    // Character counter
+    const textarea = document.getElementById('reviewText');
+    const charCount = document.getElementById('charCount');
+
+    textarea.addEventListener('input', function() {
+        const length = this.value.length;
+        charCount.textContent = `${length} / 500 characters`;
+        charCount.className = length > 450 ? 'text-danger fw-bold' : 'text-muted';
+    });
+</script>
+
+<style>
+    /* Safe custom styles – can be moved to style.css */
+    .star {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .star:hover {
+        transform: scale(1.15);
+    }
+    .rating-stars label:hover ~ label i,
+    .rating-stars label:hover i {
+        color: #ffc107 !important;
+    }
+    .form-control:focus {
+        border-color: #198754 !important;
+        box-shadow: 0 0 0 0.25rem rgba(25,135,84,.25) !important;
+    }
+</style>
+
+{% endblock %}

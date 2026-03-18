@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire & Rescue System - Forgot Password</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --secondary-color: #ff9800;
+            --dark-color: #212121;
+            --light-color: #f5f5f5;
+            --success-green: #4caf50;
+            --error-red: #f44336;
+            --warning-yellow: #ffc107;
+            --info-blue: #2196f3;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Messages Container */
+        .messages-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease-out;
+            pointer-events: auto;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .message.success {
+            border-left-color: var(--success-green);
+        }
+
+        .message.success i {
+            color: var(--success-green);
+        }
+
+        .message.error {
+            border-left-color: var(--error-red);
+        }
+
+        .message.error i {
+            color: var(--error-red);
+        }
+
+        .message.warning {
+            border-left-color: var(--warning-yellow);
+        }
+
+        .message.warning i {
+            color: var(--warning-yellow);
+        }
+
+        .message.info {
+            border-left-color: var(--info-blue);
+        }
+
+        .message.info i {
+            color: var(--info-blue);
+        }
+
+        .message-icon {
+            font-size: 1.5rem;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-title {
+            color: var(--dark-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .message-text {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .message-close {
+            color: #999;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .message-close:hover {
+            color: var(--primary-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .login-header i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 2px solid #ddd;
+            border-radius: 0;
+            padding-left: 40px;
+            height: 50px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-bottom-color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 50px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            transition: color 0.3s ease;
+        }
+
+        .btn-login {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            padding: 12px;
+            margin-top: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+        }
+
+        .btn-login i {
+            margin-right: 8px;
+        }
+
+        .additional-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .additional-options a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .additional-options a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .security-notice {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--info-blue);
+            padding: 10px 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .security-notice i {
+            color: var(--info-blue);
+            margin-right: 5px;
+        }
+
+        .flames {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .flame {
+            position: absolute;
+            background: radial-gradient(ellipse at center, rgba(255, 100, 0, 0.8) 0%, rgba(255, 0, 0, 0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: flicker 4s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .emergency-access {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .emergency-btn {
+            background-color: #f44336;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .emergency-btn:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .instruction-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(211, 47, 47, 0.05);
+            border-radius: 5px;
+        }
+
+        .instruction-text i {
+            color: var(--primary-color);
+            margin-right: 5px;
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                margin: 20px;
+            }
+
+            .additional-options {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .additional-options a {
+                margin-bottom: 10px;
+            }
+
+            .messages-container {
+                max-width: 300px;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Messages Container for Django Messages -->
+    <div class="messages-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}" id="message-{{ forloop.counter }}">
+                    <div class="message-icon">
+                        {% if message.tags == 'success' %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif message.tags == 'error' %}
+                            <i class="fas fa-exclamation-circle"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="fas fa-info-circle"></i>
+                        {% else %}
+                            <i class="fas fa-bell"></i>
+                        {% endif %}
+                    </div>
+                    <div class="message-content">
+                        <div class="message-title">
+                            {% if message.tags == 'success' %}
+                                Success
+                            {% elif message.tags == 'error' %}
+                                Error
+                            {% elif message.tags == 'warning' %}
+                                Warning
+                            {% elif message.tags == 'info' %}
+                                Information
+                            {% else %}
+                                Notification
+                            {% endif %}
+                        </div>
+                        <div class="message-text">{{ message }}</div>
+                    </div>
+                    <div class="message-close" onclick="closeMessage('message-{{ forloop.counter }}')">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Animated background flames -->
+    <div class="flames" id="flames"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="login-container">
+                    <div class="login-header">
+                        <i class="fas fa-fire-extinguisher"></i>
+                        <h2>FIRE & RESCUE SYSTEM</h2>
+                        <p>Password Recovery Portal</p>
+                    </div>
+
+                    <div class="login-body">
+                        <!-- Instruction text -->
+                        <div class="instruction-text">
+                            <i class="fas fa-info-circle"></i>
+                            Enter your registered email address to receive password reset instructions.
+                        </div>
+
+                        <form method="post" action="/myapp/forgot_post/">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <input type="email" class="form-control" name="username" id="username" placeholder="Enter your registered email" required>
+                            </div>
+
+                            <button type="submit" class="btn-login">
+                                <i class="fas fa-paper-plane"></i> Send Reset Link
+                            </button>
+
+                            <div class="additional-options">
+                                <a href="/myapp/login_get/">
+                                    <i class="fas fa-arrow-left"></i> Back to Login
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Security Notice -->
+                        <div class="security-notice">
+                            <i class="fas fa-shield-alt"></i>
+                            <strong>Security Notice:</strong> A temp password will be sent to your email if it exists in our system.
+                        </div>
+
+                        <!-- Emergency Access -->
+{#                        <div class="emergency-access">#}
+{#                            <p class="mb-2"><i class="fas fa-exclamation-triangle text-danger"></i> Emergency Access</p>#}
+{#                            <button class="emergency-btn" onclick="emergencyAccess()">#}
+{#                                <i class="fas fa-phone-alt"></i> Emergency Protocol#}
+{#                            </button>#}
+{#                            <p class="mt-2 mb-0" style="font-size: 0.75rem; color: #999;">#}
+{#                                For urgent access, contact emergency response team#}
+{#                            </p>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Create animated flame effects in the background
+        document.addEventListener('DOMContentLoaded', function() {
+            const flamesContainer = document.getElementById('flames');
+            const numFlames = 15;
+
+            for (let i = 0; i < numFlames; i++) {
+                const flame = document.createElement('div');
+                flame.classList.add('flame');
+
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+
+                // Random size
+                const size = 50 + Math.random() * 150;
+
+                // Random animation delay
+                const delay = Math.random() * 4;
+
+                flame.style.left = `${left}%`;
+                flame.style.top = `${top}%`;
+                flame.style.width = `${size}px`;
+                flame.style.height = `${size}px`;
+                flame.style.animationDelay = `${delay}s`;
+
+                flamesContainer.appendChild(flame);
+            }
+        });
+
+        // Function to close messages
+        function closeMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.style.animation = 'slideOut 0.5s ease-out forwards';
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            }
+        }
+
+        // Auto-close messages after 5 seconds
+        setTimeout(function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    if (message) {
+                        message.style.animation = 'slideOut 0.5s ease-out forwards';
+                        setTimeout(() => {
+                            message.remove();
+                        }, 500);
+                    }
+                }, index * 200); // Stagger the closing
+            });
+        }, 5000);
+
+        // Emergency button functionality
+        function emergencyAccess() {
+            // Show an emergency message
+            const emergencyMsg = {
+                tags: 'warning',
+                text: 'Emergency access protocol initiated. Please contact system administrator immediately at emergency@firerescue.gov'
+            };
+
+            // Create emergency message if no messages container exists with it
+            if (!document.querySelector('.message.warning')) {
+                const messagesContainer = document.querySelector('.messages-container');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message warning';
+                messageDiv.id = 'message-emergency';
+                messageDiv.innerHTML = `
+                    <div class="message-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-title">Emergency Alert</div>
+                        <div class="message-text">${emergencyMsg.text}</div>
+                    </div>
+                    <div class="message-close" onclick="closeMessage('message-emergency')">
+                        <i class="fas fa-times"></i>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageDiv);
+
+                // Auto close after 8 seconds
+                setTimeout(() => {
+                    const msg = document.getElementById('message-emergency');
+                    if (msg) {
+                        msg.style.animation = 'slideOut 0.5s ease-out forwards';
+                        setTimeout(() => msg.remove(), 500);
+                    }
+                }, 8000);
+            }
+        }
+
+        // Form validation
+        $('form').on('submit', function(e) {
+            const email = $('#username').val();
+            if (!email) {
+                e.preventDefault();
+                alert('Please enter your email address');
+            }
+        });
+
+        // Add animation to input icon on focus
+        $('.form-control').on('focus', function() {
+            $(this).parent().find('.input-icon i').css('color', 'var(--primary-color)');
+        });
+
+        $('.form-control').on('blur', function() {
+            $(this).parent().find('.input-icon i').css('color', '#777');
+        });
+    </script>
+</body>
+</html>
